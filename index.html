@@ -1,0 +1,2070 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cambridge Checkpoint Maths — Complete Study Guide</title>
+<link rel="icon" type="image/x-icon" href="./favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=JetBrains+Mono:wght@400;500;700&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f0ece4;
+    --surface: #faf8f4;
+    --text: #1c1917;
+    --muted: #78716c;
+    --border: #e7e0d5;
+    --mono: 'JetBrains Mono', monospace;
+    --serif: 'Playfair Display', Georgia, serif;
+    --sans: 'Outfit', sans-serif;
+
+    /* Number & Algebra */
+    --num: #b45309;
+    --num-light: #fef3c7;
+    --num-mid: #d97706;
+    --num-dark: #92400e;
+
+    /* Geometry & Measure */
+    --geo: #0f766e;
+    --geo-light: #ccfbf1;
+    --geo-mid: #14b8a6;
+    --geo-dark: #134e4a;
+
+    /* Statistics & Probability */
+    --stat: #6d28d9;
+    --stat-light: #ede9fe;
+    --stat-mid: #8b5cf6;
+    --stat-dark: #4c1d95;
+
+    /* Algebra */
+    --alg: #be123c;
+    --alg-light: #ffe4e6;
+    --alg-mid: #f43f5e;
+    --alg-dark: #881337;
+
+    /* Current strand (updated by JS) */
+    --accent: #b45309;
+    --accent-light: #fef3c7;
+    --accent-mid: #d97706;
+    --accent-dark: #92400e;
+
+    --warn: #dc2626;
+    --warn-light: #fee2e2;
+    --tip: #065f46;
+    --tip-light: #d1fae5;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: var(--sans);
+    background: var(--bg);
+    color: var(--text);
+    font-size: 15px;
+    line-height: 1.75;
+  }
+
+  /* ─── HERO ─── */
+  .hero {
+    background: var(--accent-dark);
+    color: #fff;
+    padding: 4rem 2.5rem 3rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.4s ease;
+  }
+  .hero::before {
+    content: attr(data-symbol);
+    position: absolute;
+    right: -30px;
+    top: -20px;
+    font-family: var(--serif);
+    font-style: italic;
+    font-size: 200px;
+    font-weight: 900;
+    color: rgba(255,255,255,0.05);
+    pointer-events: none;
+    line-height: 1;
+    letter-spacing: -6px;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 4px;
+    background: var(--accent-mid);
+  }
+  .hero-label {
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.18em;
+    color: rgba(255,255,255,0.55);
+    text-transform: uppercase;
+    margin-bottom: 14px;
+  }
+  .hero h1 {
+    font-family: var(--serif);
+    font-size: clamp(30px, 5.5vw, 52px);
+    font-weight: 900;
+    line-height: 1.05;
+    margin-bottom: 16px;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--accent-mid);
+  }
+  .hero p {
+    font-size: 14px;
+    color: rgba(255,255,255,0.7);
+    max-width: 580px;
+    line-height: 1.65;
+  }
+  .hero-pills {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-top: 22px;
+  }
+  .hero-pill {
+    background: rgba(255,255,255,0.12);
+    border: 1px solid rgba(255,255,255,0.18);
+    color: #fff;
+    font-size: 11px;
+    padding: 4px 12px;
+    border-radius: 4px;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+
+  /* ─── STRAND SWITCHER ─── */
+  .strand-bar {
+    display: flex;
+    background: #0c0a09;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 200;
+    border-bottom: 1px solid #2a2522;
+  }
+  .strand-bar::-webkit-scrollbar { display: none; }
+  .strand-btn {
+    flex: 1;
+    min-width: 140px;
+    padding: 15px 12px;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    border-bottom: 3px solid transparent;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+  }
+  .strand-btn:hover { color: rgba(255,255,255,0.75); }
+  .strand-btn.active { color: #fff; }
+  .strand-btn[data-strand="num"].active  { border-bottom-color: var(--num-mid); }
+  .strand-btn[data-strand="alg"].active  { border-bottom-color: var(--alg-mid); }
+  .strand-btn[data-strand="geo"].active  { border-bottom-color: var(--geo-mid); }
+  .strand-btn[data-strand="stat"].active { border-bottom-color: var(--stat-mid); }
+  .strand-dot {
+    width: 7px; height: 7px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .strand-btn[data-strand="num"]  .strand-dot { background: var(--num-mid); }
+  .strand-btn[data-strand="alg"]  .strand-dot { background: var(--alg-mid); }
+  .strand-btn[data-strand="geo"]  .strand-dot { background: var(--geo-mid); }
+  .strand-btn[data-strand="stat"] .strand-dot { background: var(--stat-mid); }
+
+  /* ─── TOC ─── */
+  .toc {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 48px;
+    z-index: 100;
+  }
+  .toc::-webkit-scrollbar { display: none; }
+  .toc a {
+    display: block;
+    padding: 11px 14px;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--muted);
+    text-decoration: none;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: color 0.2s, border-color 0.2s;
+    font-family: var(--mono);
+    letter-spacing: 0.03em;
+  }
+  .toc a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+  /* ─── PANELS ─── */
+  .strand-panel { display: none; }
+  .strand-panel.active { display: block; }
+
+  /* ─── LAYOUT ─── */
+  .container { max-width: 880px; margin: 0 auto; padding: 3rem 2rem; }
+  .section { margin-bottom: 4rem; }
+  .section-header {
+    display: flex;
+    align-items: baseline;
+    gap: 14px;
+    margin-bottom: 1.75rem;
+    padding-bottom: 14px;
+    border-bottom: 2px solid var(--border);
+    flex-wrap: wrap;
+  }
+  .section-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    color: var(--accent-mid);
+    background: var(--accent-light);
+    padding: 3px 9px;
+    border-radius: 3px;
+    flex-shrink: 0;
+    letter-spacing: 0.08em;
+    font-weight: 700;
+  }
+  .section-header h2 {
+    font-family: var(--serif);
+    font-size: 26px;
+    font-weight: 700;
+    color: var(--text);
+    line-height: 1.2;
+  }
+  .freq-tag {
+    font-size: 10px;
+    padding: 3px 9px;
+    border-radius: 20px;
+    font-weight: 600;
+    flex-shrink: 0;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+  }
+  .freq-high { background: var(--warn-light); color: var(--warn); }
+  .freq-med  { background: var(--accent-light); color: var(--accent-dark); }
+
+  /* ─── CARDS ─── */
+  .card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.35rem 1.6rem;
+    margin-bottom: 14px;
+  }
+  .card h3 {
+    font-family: var(--mono);
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--accent-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 12px;
+  }
+  .card p, .card li { font-size: 14px; line-height: 1.75; color: var(--text); }
+  .card ul { padding-left: 1.3rem; }
+  .card ul li { margin-bottom: 6px; }
+
+  /* ─── FORMULA BOX ─── */
+  .formula {
+    background: #1c1917;
+    color: #fcd34d;
+    font-family: var(--mono);
+    font-size: 13.5px;
+    padding: 14px 20px;
+    border-radius: 8px;
+    margin: 12px 0;
+    letter-spacing: 0.03em;
+    line-height: 1.6;
+    border-left: 4px solid var(--accent-mid);
+  }
+  .formula .label {
+    display: block;
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+  }
+
+  /* ─── KEY FACT ─── */
+  .key-fact {
+    background: var(--accent-light);
+    border-left: 3px solid var(--accent-mid);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: var(--accent-dark);
+    line-height: 1.65;
+  }
+  .key-fact strong { font-weight: 600; }
+
+  /* ─── WARN BOX ─── */
+  .warn-box {
+    background: var(--warn-light);
+    border-left: 3px solid var(--warn);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    margin: 12px 0;
+    font-size: 14px;
+    color: #991b1b;
+    line-height: 1.65;
+  }
+  .warn-box::before {
+    content: '⚠ Common mistake — ';
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    display: block;
+    margin-bottom: 5px;
+    color: var(--warn);
+  }
+
+  /* ─── EXAM TIP ─── */
+  .exam-tip {
+    background: var(--tip-light);
+    border: 1px solid #6ee7b7;
+    border-radius: 8px;
+    padding: 13px 17px;
+    margin: 16px 0;
+    font-size: 13.5px;
+    color: var(--tip);
+    line-height: 1.65;
+  }
+  .exam-tip::before {
+    content: '✦ Exam Tip';
+    font-weight: 600;
+    font-family: var(--mono);
+    font-size: 10px;
+    letter-spacing: 0.1em;
+    display: block;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    color: #059669;
+  }
+
+  /* ─── TABLE ─── */
+  .data-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    margin: 14px 0;
+  }
+  .data-table th {
+    background: var(--accent-dark);
+    color: #fff;
+    padding: 9px 13px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .data-table th:first-child { border-radius: 8px 0 0 0; }
+  .data-table th:last-child  { border-radius: 0 8px 0 0; }
+  .data-table td {
+    padding: 9px 13px;
+    border-bottom: 1px solid var(--border);
+    vertical-align: top;
+    color: var(--text);
+    line-height: 1.55;
+  }
+  .data-table tr:nth-child(even) td { background: var(--bg); }
+  .data-table tr:last-child td { border-bottom: none; }
+
+  /* ─── FLOW ─── */
+  .flow {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 14px 0;
+    font-size: 13px;
+  }
+  .flow-step {
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    border: 1px solid var(--accent-mid);
+    border-radius: 20px;
+    padding: 5px 15px;
+    font-weight: 500;
+    font-size: 13px;
+  }
+  .flow-arrow { color: var(--muted); font-size: 16px; font-weight: 700; }
+
+  /* ─── WORKED EXAMPLE ─── */
+  .worked {
+    background: var(--surface);
+    border: 2px solid var(--accent-mid);
+    border-radius: 10px;
+    padding: 1.25rem 1.6rem;
+    margin: 16px 0;
+    position: relative;
+  }
+  .worked::before {
+    content: 'WORKED EXAMPLE';
+    font-family: var(--mono);
+    font-size: 9px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    color: var(--accent-mid);
+    display: block;
+    margin-bottom: 10px;
+  }
+  .worked .q { font-weight: 600; color: var(--text); margin-bottom: 10px; font-size: 14px; }
+  .worked .steps { counter-reset: step; }
+  .worked .step {
+    font-size: 13.5px;
+    color: var(--text);
+    padding: 5px 0 5px 28px;
+    position: relative;
+    border-bottom: 1px dashed var(--border);
+    line-height: 1.6;
+  }
+  .worked .step:last-child { border-bottom: none; }
+  .worked .step::before {
+    counter-increment: step;
+    content: counter(step);
+    position: absolute;
+    left: 0;
+    top: 7px;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-mid);
+    color: #fff;
+    border-radius: 50%;
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+  }
+  .worked .ans {
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-dark);
+    background: var(--accent-light);
+    padding: 8px 14px;
+    border-radius: 6px;
+    margin-top: 10px;
+    font-weight: 700;
+  }
+
+  /* ─── GRID ─── */
+  .grid2 {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  /* ─── SUMMARY BAND ─── */
+  .summary-band {
+    background: var(--accent-dark);
+    color: #fff;
+    border-radius: 12px;
+    padding: 1.5rem 1.75rem;
+    margin: 1.5rem 0;
+  }
+  .summary-band h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--accent-mid);
+    margin-bottom: 14px;
+  }
+  .summary-band ul { padding-left: 1.2rem; }
+  .summary-band li {
+    font-size: 13.5px;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 6px;
+    line-height: 1.55;
+  }
+  .summary-band li strong { color: #fff; font-weight: 600; }
+
+  /* ─── PRACTICE QUESTIONS ─── */
+  .practice-section {
+    background: var(--surface);
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin-top: 2rem;
+  }
+  .practice-section h3 {
+    font-family: var(--serif);
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 6px;
+  }
+  .practice-section .subtitle {
+    font-size: 13px;
+    color: var(--muted);
+    font-family: var(--mono);
+    margin-bottom: 24px;
+    letter-spacing: 0.04em;
+  }
+  .q-block {
+    border-left: 3px solid var(--accent-mid);
+    margin-bottom: 20px;
+    padding-left: 16px;
+  }
+  .q-block .q-num {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    color: var(--accent-mid);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .q-block .q-text { font-size: 14.5px; color: var(--text); margin-bottom: 6px; line-height: 1.6; }
+  .q-block .marks {
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--muted);
+    background: var(--bg);
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 3px;
+  }
+  .answer-toggle {
+    display: inline-block;
+    margin-top: 8px;
+    padding: 5px 14px;
+    background: transparent;
+    border: 1px solid var(--accent-mid);
+    border-radius: 4px;
+    font-family: var(--mono);
+    font-size: 11px;
+    color: var(--accent-dark);
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.05em;
+  }
+  .answer-toggle:hover { background: var(--accent-light); }
+  .answer-box {
+    display: none;
+    margin-top: 10px;
+    background: var(--accent-light);
+    border-radius: 6px;
+    padding: 10px 14px;
+    font-family: var(--mono);
+    font-size: 13px;
+    color: var(--accent-dark);
+    line-height: 1.65;
+  }
+  .answer-box.visible { display: block; }
+
+  /* ─── FORMULA SHEET ─── */
+  .formula-sheet {
+    background: #1c1917;
+    border-radius: 12px;
+    padding: 1.75rem 2rem;
+    margin: 1.5rem 0;
+  }
+  .formula-sheet h4 {
+    font-family: var(--mono);
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.4);
+    margin-bottom: 18px;
+  }
+  .fs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 10px;
+  }
+  .fs-item {
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 8px;
+    padding: 10px 14px;
+  }
+  .fs-item .fs-name {
+    font-size: 10px;
+    color: rgba(255,255,255,0.35);
+    font-family: var(--mono);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .fs-item .fs-formula {
+    font-family: var(--mono);
+    font-size: 14px;
+    color: #fcd34d;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+
+  /* ─── FOOTER ─── */
+  .footer {
+    background: #0c0a09;
+    color: rgba(255,255,255,0.3);
+    text-align: center;
+    padding: 2.5rem 2rem;
+    font-size: 11px;
+    font-family: var(--mono);
+    letter-spacing: 0.06em;
+    line-height: 2;
+  }
+  .footer strong { color: rgba(255,255,255,0.5); }
+
+  /* ─── RESPONSIVE ─── */
+  @media (max-width: 600px) {
+    .hero { padding: 2.5rem 1.25rem 2rem; }
+    .container { padding: 2rem 1.25rem; }
+    .toc { padding: 0 1rem; }
+    .formula { font-size: 12px; }
+  }
+
+  @media print { .strand-bar, .toc { display: none; } body { background: white; } }
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<div class="hero" data-symbol="∑" id="hero">
+  <div class="hero-label">Cambridge Lower Secondary Checkpoint · Mathematics 0862</div>
+  <h1 id="hero-title">Complete <em>Maths</em><br>Study Guide</h1>
+  <p id="hero-desc">Every topic across all four strands: Number, Algebra, Geometry &amp; Measure, and Statistics &amp; Probability — with formulas, worked examples, exam tips, and practice questions.</p>
+  <div class="hero-pills">
+    <span class="hero-pill">Stages 7–9</span>
+    <span class="hero-pill">Paper 1 &amp; Paper 2</span>
+    <span class="hero-pill">4 strands</span>
+    <span class="hero-pill">Practice questions</span>
+    <span class="hero-pill">Full formula sheets</span>
+  </div>
+</div>
+
+<!-- STRAND SWITCHER -->
+<div class="strand-bar">
+  <button class="strand-btn active" data-strand="num"  onclick="switchStrand('num')"> <span class="strand-dot"></span>Number</button>
+  <button class="strand-btn"        data-strand="alg"  onclick="switchStrand('alg')"> <span class="strand-dot"></span>Algebra</button>
+  <button class="strand-btn"        data-strand="geo"  onclick="switchStrand('geo')"> <span class="strand-dot"></span>Geometry &amp; Measure</button>
+  <button class="strand-btn"        data-strand="stat" onclick="switchStrand('stat')"><span class="strand-dot"></span>Statistics &amp; Probability</button>
+</div>
+
+
+<!-- ═══════════════════════════ NUMBER ═══════════════════════════ -->
+<div class="strand-panel active" id="panel-num">
+  <nav class="toc">
+    <a href="#num-integers">Integers</a>
+    <a href="#num-fractions">Fractions</a>
+    <a href="#num-decimals">Decimals &amp; %</a>
+    <a href="#num-powers">Powers &amp; Roots</a>
+    <a href="#num-ratio">Ratio &amp; Proportion</a>
+    <a href="#num-primes">Primes &amp; Factors</a>
+    <a href="#num-standard">Standard Form</a>
+    <a href="#num-technique">Exam Technique</a>
+    <a href="#num-practice">Practice Qs</a>
+  </nav>
+  <div class="container">
+
+    <!-- INTEGERS -->
+    <div class="section" id="num-integers">
+      <div class="section-header">
+        <span class="section-num">N.01</span>
+        <h2>Integers &amp; Directed Numbers</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Rules for directed numbers</h3>
+        <table class="data-table">
+          <tr><th>Operation</th><th>Rule</th><th>Example</th></tr>
+          <tr><td>Adding a negative</td><td>Subtract instead</td><td>5 + (−3) = 5 − 3 = 2</td></tr>
+          <tr><td>Subtracting a negative</td><td>Add instead</td><td>5 − (−3) = 5 + 3 = 8</td></tr>
+          <tr><td>Multiplying: same signs</td><td>Answer is positive</td><td>(−4) × (−3) = +12</td></tr>
+          <tr><td>Multiplying: different signs</td><td>Answer is negative</td><td>(−4) × 3 = −12</td></tr>
+          <tr><td>Dividing: same signs</td><td>Answer is positive</td><td>(−12) ÷ (−3) = +4</td></tr>
+          <tr><td>Dividing: different signs</td><td>Answer is negative</td><td>(−12) ÷ 3 = −4</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Order of operations — BIDMAS</h3>
+        <div class="flow">
+          <span class="flow-step">B rackets</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">I ndices</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">D ivision &amp; M ultiplication</span>
+          <span class="flow-arrow">→</span>
+          <span class="flow-step">A ddition &amp; S ubtraction</span>
+        </div>
+        <div class="key-fact"><strong>Division and multiplication have equal priority</strong> — work left to right. Same for addition and subtraction.</div>
+      </div>
+      <div class="worked">
+        <div class="q">Calculate: 3 + (2 − 5)² ÷ 3 × 2</div>
+        <div class="steps">
+          <div class="step">Brackets first: 2 − 5 = −3</div>
+          <div class="step">Indices: (−3)² = 9</div>
+          <div class="step">Divide: 9 ÷ 3 = 3</div>
+          <div class="step">Multiply: 3 × 2 = 6</div>
+          <div class="step">Add: 3 + 6 = 9</div>
+        </div>
+        <div class="ans">Answer: 9</div>
+      </div>
+      <div class="exam-tip">In BIDMAS, division and multiplication are done at the same time (left to right), NOT division before multiplication. 12 ÷ 4 × 3 = 3 × 3 = 9, not 12 ÷ 12 = 1.</div>
+    </div>
+
+    <!-- FRACTIONS -->
+    <div class="section" id="num-fractions">
+      <div class="section-header">
+        <span class="section-num">N.02</span>
+        <h2>Fractions</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Operations with fractions</h3>
+        <table class="data-table">
+          <tr><th>Operation</th><th>Method</th><th>Example</th></tr>
+          <tr><td><strong>Adding / Subtracting</strong></td><td>Find common denominator, then add/subtract numerators</td><td>1/3 + 1/4 = 4/12 + 3/12 = 7/12</td></tr>
+          <tr><td><strong>Multiplying</strong></td><td>Multiply numerators together; multiply denominators together</td><td>2/3 × 3/5 = 6/15 = 2/5</td></tr>
+          <tr><td><strong>Dividing</strong></td><td>Keep the first fraction, flip the second, multiply (KFC: Keep Flip Change)</td><td>2/3 ÷ 4/5 = 2/3 × 5/4 = 10/12 = 5/6</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Mixed numbers and improper fractions</h3>
+        <div class="formula"><span class="label">Mixed to Improper</span>2 3/4 → (2 × 4) + 3 = 11  →  11/4</div>
+        <div class="formula"><span class="label">Improper to Mixed</span>11/4 → 11 ÷ 4 = 2 remainder 3  →  2 3/4</div>
+        <div class="warn-box">Always convert mixed numbers to improper fractions before multiplying or dividing. Operating directly with mixed numbers gives wrong answers.</div>
+      </div>
+      <div class="worked">
+        <div class="q">Calculate 1⅔ × 2¼</div>
+        <div class="steps">
+          <div class="step">Convert: 1⅔ = 5/3 and 2¼ = 9/4</div>
+          <div class="step">Multiply: 5/3 × 9/4 = 45/12</div>
+          <div class="step">Simplify: 45/12 = 15/4</div>
+          <div class="step">Convert back: 15/4 = 3¾</div>
+        </div>
+        <div class="ans">Answer: 3¾</div>
+      </div>
+      <div class="exam-tip">Always simplify fractions by dividing numerator and denominator by their HCF (highest common factor). Show this step in working for full marks.</div>
+    </div>
+
+    <!-- DECIMALS & PERCENTAGES -->
+    <div class="section" id="num-decimals">
+      <div class="section-header">
+        <span class="section-num">N.03</span>
+        <h2>Decimals &amp; Percentages</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Percentage of a quantity</h3>
+          <div class="formula">Amount = (% ÷ 100) × Total</div>
+          <p>e.g. 35% of 240: 0.35 × 240 = <strong>84</strong></p>
+        </div>
+        <div class="card">
+          <h3>Percentage change</h3>
+          <div class="formula">% change = (change ÷ original) × 100</div>
+          <p>e.g. 80 → 92: change = 12, so 12/80 × 100 = <strong>15%</strong></p>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Multiplier method (most efficient!)</h3>
+        <table class="data-table">
+          <tr><th>Task</th><th>Multiplier</th><th>Example</th></tr>
+          <tr><td>Increase by 20%</td><td>× 1.20</td><td>£80 × 1.20 = £96</td></tr>
+          <tr><td>Decrease by 15%</td><td>× 0.85</td><td>£80 × 0.85 = £68</td></tr>
+          <tr><td>Find original after +25%</td><td>÷ 1.25</td><td>£125 ÷ 1.25 = £100</td></tr>
+          <tr><td>Find original after −30%</td><td>÷ 0.70</td><td>£70 ÷ 0.70 = £100</td></tr>
+        </table>
+        <div class="key-fact">The multiplier method is the fastest route in Checkpoint. Increasing by r% uses multiplier (1 + r/100); decreasing uses (1 − r/100).</div>
+      </div>
+      <div class="card">
+        <h3>Converting between fractions, decimals, and percentages</h3>
+        <div class="flow">
+          <span class="flow-step">Fraction</span><span class="flow-arrow">÷ top by bottom</span>
+          <span class="flow-step">Decimal</span><span class="flow-arrow">× 100</span>
+          <span class="flow-step">Percentage</span>
+        </div>
+        <table class="data-table" style="margin-top:12px">
+          <tr><th>Fraction</th><th>Decimal</th><th>Percentage</th></tr>
+          <tr><td>1/2</td><td>0.5</td><td>50%</td></tr>
+          <tr><td>1/4</td><td>0.25</td><td>25%</td></tr>
+          <tr><td>3/4</td><td>0.75</td><td>75%</td></tr>
+          <tr><td>1/5</td><td>0.2</td><td>20%</td></tr>
+          <tr><td>1/8</td><td>0.125</td><td>12.5%</td></tr>
+          <tr><td>1/3</td><td>0.333…</td><td>33.3…%</td></tr>
+          <tr><td>2/3</td><td>0.666…</td><td>66.6…%</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Rounding</h3>
+        <table class="data-table">
+          <tr><th>Type</th><th>Rule</th><th>3472.956 rounded to…</th></tr>
+          <tr><td>Decimal places (d.p.)</td><td>Count digits after decimal point</td><td>2 d.p. → 3472.96</td></tr>
+          <tr><td>Significant figures (s.f.)</td><td>Count from first non-zero digit</td><td>3 s.f. → 3470</td></tr>
+          <tr><td>Nearest whole number</td><td>Look at first decimal digit</td><td>→ 3473</td></tr>
+        </table>
+        <div class="warn-box">When rounding 3472.956 to 3 s.f., the digits are 3, 4, 7 — the next digit is 2 which rounds down, giving 3470 (not 3472). Always recount significant figures carefully.</div>
+      </div>
+      <div class="exam-tip">For percentage problems, always identify whether you need (a) % of a quantity, (b) % change, or (c) reverse percentage. Write it down before calculating to avoid using the wrong formula.</div>
+    </div>
+
+    <!-- POWERS & ROOTS -->
+    <div class="section" id="num-powers">
+      <div class="section-header">
+        <span class="section-num">N.04</span>
+        <h2>Powers, Roots &amp; Indices</h2>
+        <span class="freq-tag freq-med">Medium-high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Index laws</h3>
+        <table class="data-table">
+          <tr><th>Law</th><th>Rule</th><th>Example</th></tr>
+          <tr><td>Multiplying same base</td><td>aᵐ × aⁿ = aᵐ⁺ⁿ</td><td>3⁴ × 3² = 3⁶</td></tr>
+          <tr><td>Dividing same base</td><td>aᵐ ÷ aⁿ = aᵐ⁻ⁿ</td><td>5⁶ ÷ 5² = 5⁴</td></tr>
+          <tr><td>Power of a power</td><td>(aᵐ)ⁿ = aᵐˣⁿ</td><td>(2³)⁴ = 2¹²</td></tr>
+          <tr><td>Zero index</td><td>a⁰ = 1 (any base except 0)</td><td>7⁰ = 1</td></tr>
+          <tr><td>Negative index</td><td>a⁻ⁿ = 1/aⁿ</td><td>2⁻³ = 1/8</td></tr>
+        </table>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Key squares to memorise</h3>
+          <p>1²=1, 2²=4, 3²=9, 4²=16, 5²=25, 6²=36, 7²=49, 8²=64, 9²=81, 10²=100, 11²=121, 12²=144, 13²=169, 14²=196, 15²=225</p>
+        </div>
+        <div class="card">
+          <h3>Key cubes to memorise</h3>
+          <p>1³=1, 2³=8, 3³=27, 4³=64, 5³=125, 10³=1000</p>
+          <p style="margin-top:8px">Square roots: √4=2, √9=3, √16=4, √25=5, √36=6, √49=7, √64=8, √81=9, √100=10</p>
+        </div>
+      </div>
+      <div class="exam-tip">Remember: (−3)² = +9 because negative × negative = positive. But −3² = −9 because the square only applies to the 3, not the minus sign. The bracket makes all the difference.</div>
+    </div>
+
+    <!-- RATIO & PROPORTION -->
+    <div class="section" id="num-ratio">
+      <div class="section-header">
+        <span class="section-num">N.05</span>
+        <h2>Ratio &amp; Proportion</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Simplifying ratios</h3>
+        <p>Divide all parts by their HCF.</p>
+        <p>e.g. 24 : 36 : 48 → divide by 12 → <strong>2 : 3 : 4</strong></p>
+        <p style="margin-top:8px">With units: make same unit first. 40 cm : 2 m = 40 cm : 200 cm = <strong>1 : 5</strong></p>
+      </div>
+      <div class="card">
+        <h3>Sharing in a given ratio</h3>
+        <div class="formula"><span class="label">Method</span>1. Add the parts of the ratio  →  2. Divide total by sum  →  3. Multiply each part</div>
+        <div class="worked" style="border-color: var(--num-mid)">
+          <div class="q">Share $240 in the ratio 3 : 5</div>
+          <div class="steps">
+            <div class="step">Total parts: 3 + 5 = 8</div>
+            <div class="step">One part = 240 ÷ 8 = 30</div>
+            <div class="step">First share: 3 × 30 = $90; Second: 5 × 30 = $150</div>
+          </div>
+          <div class="ans">$90 and $150</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Direct and inverse proportion</h3>
+        <table class="data-table">
+          <tr><th>Type</th><th>Meaning</th><th>Formula</th></tr>
+          <tr><td><strong>Direct</strong></td><td>As one increases, the other increases proportionally</td><td>y = kx &nbsp;→&nbsp; k = y ÷ x</td></tr>
+          <tr><td><strong>Inverse</strong></td><td>As one increases, the other decreases proportionally</td><td>y = k/x &nbsp;→&nbsp; k = xy</td></tr>
+        </table>
+        <div class="key-fact">To check direct proportion: the ratio y/x must be constant. To check inverse proportion: the product xy must be constant.</div>
+      </div>
+      <div class="card">
+        <h3>Map scales</h3>
+        <div class="formula">Actual distance = Map distance × Scale</div>
+        <p>Scale 1 : 50,000 means 1 cm on map = 50,000 cm = 500 m in real life.</p>
+      </div>
+      <div class="exam-tip">With ratio problems, always check your answer by adding the parts — they should sum to the original total. This catches arithmetic errors quickly.</div>
+    </div>
+
+    <!-- PRIMES & FACTORS -->
+    <div class="section" id="num-primes">
+      <div class="section-header">
+        <span class="section-num">N.06</span>
+        <h2>Primes, Factors &amp; Multiples</h2>
+        <span class="freq-tag freq-med">Medium frequency</span>
+      </div>
+      <div class="grid2">
+        <div class="card">
+          <h3>Key definitions</h3>
+          <ul>
+            <li><strong>Factor</strong> — a whole number that divides exactly into another</li>
+            <li><strong>Multiple</strong> — result of multiplying a number by an integer</li>
+            <li><strong>Prime</strong> — only has exactly 2 factors: 1 and itself</li>
+            <li><strong>Prime factorisation</strong> — expressing a number as a product of primes</li>
+            <li><strong>HCF</strong> — highest common factor (largest shared factor)</li>
+            <li><strong>LCM</strong> — lowest common multiple (smallest shared multiple)</li>
+          </ul>
+        </div>
+        <div class="card">
+          <h3>Primes to 50</h3>
+          <p>2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37, 41, 43, 47</p>
+          <div class="warn-box" style="margin-top:8px">1 is NOT a prime number — it has only one factor. 2 is the only even prime number.</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Finding HCF and LCM using prime factorisation</h3>
+        <div class="worked">
+          <div class="q">Find the HCF and LCM of 36 and 60</div>
+          <div class="steps">
+            <div class="step">Prime factorise: 36 = 2² × 3² &nbsp;&nbsp; 60 = 2² × 3 × 5</div>
+            <div class="step">HCF: take the lowest power of each shared prime: 2² × 3 = <strong>12</strong></div>
+            <div class="step">LCM: take the highest power of each prime present: 2² × 3² × 5 = <strong>180</strong></div>
+          </div>
+          <div class="ans">HCF = 12, LCM = 180</div>
+        </div>
+      </div>
+      <div class="exam-tip">Use a Venn diagram for HCF/LCM questions: shared prime factors go in the middle (multiply for HCF); all factors across both circles multiply for LCM.</div>
+    </div>
+
+    <!-- STANDARD FORM -->
+    <div class="section" id="num-standard">
+      <div class="section-header">
+        <span class="section-num">N.07</span>
+        <h2>Standard Form</h2>
+        <span class="freq-tag freq-med">Medium frequency</span>
+      </div>
+      <div class="card">
+        <h3>What is standard form?</h3>
+        <div class="formula">A × 10ⁿ  where  1 ≤ A &lt; 10  and  n is an integer</div>
+        <table class="data-table">
+          <tr><th>Number</th><th>Standard form</th><th>n is…</th></tr>
+          <tr><td>4,700,000</td><td>4.7 × 10⁶</td><td>Positive (large number)</td></tr>
+          <tr><td>0.00047</td><td>4.7 × 10⁻⁴</td><td>Negative (small number)</td></tr>
+          <tr><td>385</td><td>3.85 × 10²</td><td>Positive</td></tr>
+          <tr><td>0.0000012</td><td>1.2 × 10⁻⁶</td><td>Negative</td></tr>
+        </table>
+        <div class="key-fact">The power of 10 tells you how many places to move the decimal point. Positive power = move right (bigger); Negative = move left (smaller).</div>
+      </div>
+      <div class="card">
+        <h3>Calculations in standard form</h3>
+        <div class="formula"><span class="label">Multiply</span>(3 × 10⁴) × (2 × 10³) = (3 × 2) × 10⁴⁺³ = 6 × 10⁷</div>
+        <div class="formula"><span class="label">Divide</span>(8 × 10⁶) ÷ (2 × 10²) = (8 ÷ 2) × 10⁶⁻² = 4 × 10⁴</div>
+        <div class="warn-box">After multiplying/dividing the A values, check that the result is still between 1 and 10. If you get 24 × 10⁵, convert it to 2.4 × 10⁶.</div>
+      </div>
+      <div class="exam-tip">A quick check: if the number is greater than 1, the power of 10 is positive. If the number is between 0 and 1, the power of 10 is negative.</div>
+    </div>
+
+    <!-- NUMBER TECHNIQUE -->
+    <div class="section" id="num-technique">
+      <div class="section-header">
+        <span class="section-num">N.08</span>
+        <h2>Exam Technique — Number</h2>
+      </div>
+      <div class="summary-band">
+        <h4>Number — key formulas &amp; rules to memorise</h4>
+        <ul>
+          <li><strong>% change:</strong> (change ÷ original) × 100</li>
+          <li><strong>Multiplier:</strong> increase by r% → × (1 + r/100); decrease → × (1 − r/100)</li>
+          <li><strong>Share in ratio a:b</strong> — total parts = a+b; one part = total ÷ (a+b)</li>
+          <li><strong>Index laws:</strong> aᵐ × aⁿ = aᵐ⁺ⁿ; aᵐ ÷ aⁿ = aᵐ⁻ⁿ; (aᵐ)ⁿ = aᵐⁿ; a⁰ = 1</li>
+          <li><strong>Standard form:</strong> A × 10ⁿ where 1 ≤ A &lt; 10</li>
+          <li><strong>HCF:</strong> product of shared primes (lowest powers)</li>
+          <li><strong>LCM:</strong> product of all primes (highest powers)</li>
+          <li><strong>Fraction division:</strong> Keep–Flip–Change (KFC)</li>
+          <li><strong>s.f.:</strong> count from first non-zero digit; <strong>d.p.:</strong> count after decimal point</li>
+          <li><strong>Direct proportion:</strong> y/x = k; <strong>Inverse:</strong> xy = k</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- NUMBER PRACTICE -->
+    <div class="section" id="num-practice">
+      <div class="section-header">
+        <span class="section-num">N.09</span>
+        <h2>Practice Questions — Number</h2>
+      </div>
+      <div class="practice-section">
+        <h3>Try these exam-style questions</h3>
+        <div class="subtitle">Attempt each question before revealing the answer. Show all working.</div>
+
+        <div class="q-block">
+          <div class="q-num">Question 1</div>
+          <div class="q-text">Work out the value of: 4 + (3 − 7)² ÷ 8 × 2</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Brackets: 3 − 7 = −4 → Indices: (−4)² = 16 → Divide: 16 ÷ 8 = 2 → Multiply: 2 × 2 = 4 → Add: 4 + 4 = <strong>8</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 2</div>
+          <div class="q-text">A jacket costs $120. It is reduced by 35% in a sale. What is the sale price?</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Multiplier = 1 − 0.35 = 0.65 → 120 × 0.65 = <strong>$78</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 3</div>
+          <div class="q-text">Share $350 in the ratio 2 : 3 : 5</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Total parts: 2+3+5 = 10 → One part: 350 ÷ 10 = $35 → Shares: 2×35 = <strong>$70</strong>, 3×35 = <strong>$105</strong>, 5×35 = <strong>$175</strong> → Check: 70+105+175 = 350 ✓</div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 4</div>
+          <div class="q-text">Write 0.000056 in standard form.</div>
+          <span class="marks">[1 mark]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box"><strong>5.6 × 10⁻⁵</strong> (move decimal 5 places right to get 5.6; since original is small, power is negative)</div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 5</div>
+          <div class="q-text">Find the HCF and LCM of 48 and 72.</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">48 = 2⁴ × 3 &nbsp;&nbsp; 72 = 2³ × 3² → HCF: 2³ × 3 = <strong>24</strong> → LCM: 2⁴ × 3² = <strong>144</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 6</div>
+          <div class="q-text">A price increased from $80 to $94. What is the percentage increase?</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Change = 94 − 80 = 14 → % increase = (14 ÷ 80) × 100 = <strong>17.5%</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════ ALGEBRA ═══════════════════════════ -->
+<div class="strand-panel" id="panel-alg">
+  <nav class="toc">
+    <a href="#alg-expressions">Expressions</a>
+    <a href="#alg-equations">Equations</a>
+    <a href="#alg-inequalities">Inequalities</a>
+    <a href="#alg-sequences">Sequences</a>
+    <a href="#alg-graphs">Graphs</a>
+    <a href="#alg-simultaneous">Simultaneous Eq.</a>
+    <a href="#alg-technique">Exam Technique</a>
+    <a href="#alg-practice">Practice Qs</a>
+  </nav>
+  <div class="container">
+
+    <!-- EXPRESSIONS -->
+    <div class="section" id="alg-expressions">
+      <div class="section-header">
+        <span class="section-num">A.01</span>
+        <h2>Expressions, Expanding &amp; Factorising</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Collecting like terms</h3>
+        <p>Only add or subtract terms with exactly the same variable(s) and power.</p>
+        <p style="margin-top:8px">e.g. 3x² + 5x − 2x² + 4x − 1 = <strong>x² + 9x − 1</strong></p>
+        <div class="warn-box">3x and 3x² are NOT like terms — the powers are different. 5xy and 5x are also NOT like terms.</div>
+      </div>
+      <div class="card">
+        <h3>Expanding single brackets</h3>
+        <div class="formula">a(b + c) = ab + ac</div>
+        <p>e.g. 3(2x − 5) = 6x − 15 &nbsp;&nbsp;&nbsp; −2(x + 4) = −2x − 8</p>
+      </div>
+      <div class="card">
+        <h3>Expanding double brackets (FOIL)</h3>
+        <div class="formula">(a + b)(c + d) = ac + ad + bc + bd</div>
+        <div class="worked">
+          <div class="q">Expand (2x + 3)(x − 5)</div>
+          <div class="steps">
+            <div class="step">First: 2x × x = 2x²</div>
+            <div class="step">Outer: 2x × −5 = −10x</div>
+            <div class="step">Inner: 3 × x = 3x</div>
+            <div class="step">Last: 3 × −5 = −15</div>
+            <div class="step">Collect like terms: 2x² − 10x + 3x − 15 = 2x² − 7x − 15</div>
+          </div>
+          <div class="ans">2x² − 7x − 15</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Factorising</h3>
+        <table class="data-table">
+          <tr><th>Type</th><th>Method</th><th>Example</th></tr>
+          <tr><td>Common factor</td><td>Find HCF of all terms; place outside bracket</td><td>6x² + 9x = 3x(2x + 3)</td></tr>
+          <tr><td>Difference of two squares</td><td>a² − b² = (a+b)(a−b)</td><td>x² − 25 = (x+5)(x−5)</td></tr>
+          <tr><td>Quadratic (simple)</td><td>Find two numbers that add to b and multiply to c in x² + bx + c</td><td>x² + 5x + 6 = (x+2)(x+3)</td></tr>
+        </table>
+      </div>
+      <div class="exam-tip">When factorising, always check your answer by re-expanding — it takes 10 seconds and guarantees a correct answer.</div>
+    </div>
+
+    <!-- EQUATIONS -->
+    <div class="section" id="alg-equations">
+      <div class="section-header">
+        <span class="section-num">A.02</span>
+        <h2>Solving Equations</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Solving linear equations — inverse operations</h3>
+        <div class="key-fact">The golden rule: whatever you do to one side, do to the other. Work backwards using inverse operations: + undone by −; × undone by ÷; squares undone by √.</div>
+        <div class="worked">
+          <div class="q">Solve 3(2x − 1) = 4x + 11</div>
+          <div class="steps">
+            <div class="step">Expand: 6x − 3 = 4x + 11</div>
+            <div class="step">Collect x terms: 6x − 4x = 11 + 3 → 2x = 14</div>
+            <div class="step">Divide: x = 7</div>
+            <div class="step">Check: 3(14−1) = 39; 4(7)+11 = 39 ✓</div>
+          </div>
+          <div class="ans">x = 7</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Equations with fractions</h3>
+        <div class="formula"><span class="label">Method: multiply through by the LCM of denominators</span>x/3 + x/4 = 7  →  multiply by 12  →  4x + 3x = 84  →  7x = 84  →  x = 12</div>
+      </div>
+      <div class="card">
+        <h3>Forming and solving equations</h3>
+        <p>Translate words into algebra, form the equation, then solve.</p>
+        <div class="worked">
+          <div class="q">The perimeter of a rectangle is 34 cm. Its length is (2x+3) cm and width is (x−1) cm. Find x.</div>
+          <div class="steps">
+            <div class="step">Perimeter formula: 2(length + width) = 34</div>
+            <div class="step">Substitute: 2((2x+3) + (x−1)) = 34</div>
+            <div class="step">Simplify inside: 2(3x+2) = 34 → 6x+4 = 34</div>
+            <div class="step">Solve: 6x = 30 → x = 5</div>
+          </div>
+          <div class="ans">x = 5 (length = 13 cm, width = 4 cm)</div>
+        </div>
+      </div>
+      <div class="exam-tip">Always substitute your answer back into the original equation to verify it's correct — examiners award marks for checking and you'll catch any slips.</div>
+    </div>
+
+    <!-- INEQUALITIES -->
+    <div class="section" id="alg-inequalities">
+      <div class="section-header">
+        <span class="section-num">A.03</span>
+        <h2>Inequalities</h2>
+        <span class="freq-tag freq-med">Medium-high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Inequality symbols</h3>
+        <table class="data-table">
+          <tr><th>Symbol</th><th>Meaning</th><th>Number line</th></tr>
+          <tr><td>&gt;</td><td>greater than</td><td>Open circle, arrow pointing right</td></tr>
+          <tr><td>&lt;</td><td>less than</td><td>Open circle, arrow pointing left</td></tr>
+          <tr><td>≥</td><td>greater than or equal to</td><td>Filled/closed circle, arrow pointing right</td></tr>
+          <tr><td>≤</td><td>less than or equal to</td><td>Filled/closed circle, arrow pointing left</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Solving inequalities</h3>
+        <p>Solve exactly like an equation — except: <strong>if you multiply or divide by a negative number, FLIP the inequality sign.</strong></p>
+        <div class="formula"><span class="label">Example</span>3x − 7 &gt; 2  →  3x &gt; 9  →  x &gt; 3</div>
+        <div class="formula"><span class="label">With negative flip</span>−2x &lt; 6  →  divide by −2, flip sign  →  x &gt; −3</div>
+        <div class="warn-box">Dividing by a negative number flips the inequality: −2x &lt; 6 becomes x &gt; −3 (NOT x &lt; −3). This is the single most common inequality error.</div>
+      </div>
+      <div class="card">
+        <h3>Integer values satisfying an inequality</h3>
+        <p>e.g. Find all integers satisfying −2 &lt; x ≤ 4: these are −1, 0, 1, 2, 3, 4 (−2 is excluded because &lt;, not ≤).</p>
+      </div>
+    </div>
+
+    <!-- SEQUENCES -->
+    <div class="section" id="alg-sequences">
+      <div class="section-header">
+        <span class="section-num">A.04</span>
+        <h2>Sequences</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Arithmetic (linear) sequences</h3>
+        <div class="formula"><span class="label">nth term (arithmetic)</span>nth term = a + (n−1)d  &nbsp;where a = first term, d = common difference</div>
+        <p>Or simply: find the pattern, work backwards to the "zeroth term".</p>
+        <div class="worked">
+          <div class="q">Find the nth term of: 5, 8, 11, 14, …</div>
+          <div class="steps">
+            <div class="step">Common difference d = 3 (going up by 3 each time)</div>
+            <div class="step">Multiply by n: 3n gives 3, 6, 9, 12 — 2 less than sequence</div>
+            <div class="step">Adjust: nth term = 3n + 2</div>
+            <div class="step">Check: n=1 → 3+2=5 ✓, n=2 → 6+2=8 ✓</div>
+          </div>
+          <div class="ans">nth term = 3n + 2</div>
+        </div>
+        <div class="key-fact">Quick method: coefficient of n = common difference. Substitute n=1 to find the constant adjustment.</div>
+      </div>
+      <div class="card">
+        <h3>Geometric sequences</h3>
+        <div class="formula">Each term is multiplied by a fixed ratio (r): nth term = a × rⁿ⁻¹</div>
+        <p>e.g. 3, 6, 12, 24, … — ratio r = 2; nth term = 3 × 2ⁿ⁻¹</p>
+      </div>
+      <div class="card">
+        <h3>Special sequences to recognise</h3>
+        <table class="data-table">
+          <tr><th>Sequence</th><th>Pattern</th><th>nth term</th></tr>
+          <tr><td>Square numbers: 1, 4, 9, 16, 25, …</td><td>n²</td><td>n²</td></tr>
+          <tr><td>Triangular numbers: 1, 3, 6, 10, 15, …</td><td>½n(n+1)</td><td>n(n+1)/2</td></tr>
+          <tr><td>Cube numbers: 1, 8, 27, 64, …</td><td>n³</td><td>n³</td></tr>
+          <tr><td>Powers of 2: 1, 2, 4, 8, 16, …</td><td>×2 each time</td><td>2ⁿ⁻¹</td></tr>
+        </table>
+      </div>
+      <div class="exam-tip">To test if a term is in a sequence, set the nth term formula equal to that number and solve for n. If n is a positive integer, the term is in the sequence.</div>
+    </div>
+
+    <!-- GRAPHS -->
+    <div class="section" id="alg-graphs">
+      <div class="section-header">
+        <span class="section-num">A.05</span>
+        <h2>Graphs &amp; Functions</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Straight-line graphs: y = mx + c</h3>
+        <div class="formula">y = mx + c &nbsp;&nbsp; m = gradient = rise/run &nbsp;&nbsp; c = y-intercept</div>
+        <table class="data-table">
+          <tr><th>If gradient m is…</th><th>The line…</th></tr>
+          <tr><td>Positive (m &gt; 0)</td><td>Slopes upward left to right</td></tr>
+          <tr><td>Negative (m &lt; 0)</td><td>Slopes downward left to right</td></tr>
+          <tr><td>Zero (m = 0)</td><td>Is horizontal (y = c)</td></tr>
+          <tr><td>Undefined</td><td>Is vertical (x = k)</td></tr>
+          <tr><td>Steeper (larger |m|)</td><td>More steep angle</td></tr>
+        </table>
+        <div class="key-fact">Gradient = (y₂ − y₁) ÷ (x₂ − x₁). Count squares on the graph: rise (vertical) divided by run (horizontal). Include sign!</div>
+      </div>
+      <div class="card">
+        <h3>Finding the equation of a line</h3>
+        <div class="worked">
+          <div class="q">Find the equation of the line through (1, 5) and (3, 11)</div>
+          <div class="steps">
+            <div class="step">Gradient: m = (11−5) ÷ (3−1) = 6/2 = 3</div>
+            <div class="step">Use y = mx + c with one point: 5 = 3(1) + c → c = 2</div>
+            <div class="step">Write equation: y = 3x + 2</div>
+          </div>
+          <div class="ans">y = 3x + 2</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Parallel and perpendicular lines</h3>
+        <table class="data-table">
+          <tr><th>Relationship</th><th>Gradient rule</th><th>Example</th></tr>
+          <tr><td>Parallel lines</td><td>Same gradient</td><td>y = 3x+1 and y = 3x−4 are parallel</td></tr>
+          <tr><td>Perpendicular lines</td><td>Gradients multiply to −1: m₂ = −1/m₁</td><td>m=2 and m=−½ are perpendicular</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Quadratic graphs: y = ax² + bx + c</h3>
+        <ul>
+          <li>a &gt; 0: U-shaped (minimum point); a &lt; 0: ∩-shaped (maximum point)</li>
+          <li>Roots are where the curve crosses the x-axis (y = 0)</li>
+          <li>Line of symmetry: x = −b/(2a)</li>
+          <li>y-intercept: (0, c)</li>
+        </ul>
+      </div>
+      <div class="exam-tip">When drawing a straight-line graph, always plot at least 3 points (two to draw the line, one to check). Choose x = 0, a middle value, and a larger x value.</div>
+    </div>
+
+    <!-- SIMULTANEOUS -->
+    <div class="section" id="alg-simultaneous">
+      <div class="section-header">
+        <span class="section-num">A.06</span>
+        <h2>Simultaneous Equations</h2>
+        <span class="freq-tag freq-med">Medium-high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Elimination method</h3>
+        <div class="worked">
+          <div class="q">Solve: 2x + 3y = 12 and 4x − y = 2</div>
+          <div class="steps">
+            <div class="step">Multiply second equation by 3: 12x − 3y = 6</div>
+            <div class="step">Add to first equation: (2x+3y) + (12x−3y) = 12+6 → 14x = 18 → x = 9/7</div>
+            <div class="step">Substitute back: 2(9/7) + 3y = 12 → 3y = 12 − 18/7 = 66/7 → y = 22/7</div>
+            <div class="step">Check in second: 4(9/7) − 22/7 = 36/7 − 22/7 = 14/7 = 2 ✓</div>
+          </div>
+          <div class="ans">x = 9/7, y = 22/7 (or approx. x ≈ 1.29, y ≈ 3.14)</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Substitution method</h3>
+        <div class="worked">
+          <div class="q">Solve: y = 2x + 1 and 3x + y = 16</div>
+          <div class="steps">
+            <div class="step">Substitute y = 2x+1 into second equation: 3x + (2x+1) = 16</div>
+            <div class="step">Simplify: 5x + 1 = 16 → 5x = 15 → x = 3</div>
+            <div class="step">Find y: y = 2(3)+1 = 7</div>
+          </div>
+          <div class="ans">x = 3, y = 7</div>
+        </div>
+        <div class="exam-tip">Use substitution when one equation is already solved for a variable (e.g. y = …). Use elimination when both equations are in the form ax + by = c.</div>
+      </div>
+    </div>
+
+    <!-- ALGEBRA TECHNIQUE -->
+    <div class="section" id="alg-technique">
+      <div class="section-header">
+        <span class="section-num">A.07</span>
+        <h2>Exam Technique — Algebra</h2>
+      </div>
+      <div class="summary-band">
+        <h4>Algebra — key formulas to memorise</h4>
+        <ul>
+          <li><strong>nth term (arithmetic):</strong> a + (n−1)d, or dn + (a−d)</li>
+          <li><strong>Straight line:</strong> y = mx + c; gradient = (y₂−y₁)/(x₂−x₁)</li>
+          <li><strong>FOIL:</strong> (a+b)(c+d) = ac + ad + bc + bd</li>
+          <li><strong>Difference of two squares:</strong> a²−b² = (a+b)(a−b)</li>
+          <li><strong>Inequality flip:</strong> multiply/divide by negative → flip sign</li>
+          <li><strong>Perpendicular gradients:</strong> m₁ × m₂ = −1</li>
+          <li><strong>Always check:</strong> substitute answer back into original equation</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- ALGEBRA PRACTICE -->
+    <div class="section" id="alg-practice">
+      <div class="section-header">
+        <span class="section-num">A.08</span>
+        <h2>Practice Questions — Algebra</h2>
+      </div>
+      <div class="practice-section">
+        <h3>Try these exam-style questions</h3>
+        <div class="subtitle">Attempt each question before revealing the answer. Show all working.</div>
+
+        <div class="q-block">
+          <div class="q-num">Question 1</div>
+          <div class="q-text">Expand and simplify: (3x − 2)(x + 5)</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">FOIL: 3x² + 15x − 2x − 10 = <strong>3x² + 13x − 10</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 2</div>
+          <div class="q-text">Find the nth term of the sequence: 7, 3, −1, −5, …</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">d = −4; coefficient = −4n. When n=1: −4+c=7, so c=11. <strong>nth term = −4n + 11</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 3</div>
+          <div class="q-text">Solve: 5(x − 3) = 2x + 6</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">5x − 15 = 2x + 6 → 3x = 21 → <strong>x = 7</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 4</div>
+          <div class="q-text">A line has gradient −3 and passes through (0, 4). Write its equation. Write the equation of a parallel line through (2, 0).</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">First line: <strong>y = −3x + 4</strong> (m=−3, c=4). Parallel line: same gradient. 0 = −3(2)+c → c=6 → <strong>y = −3x + 6</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 5</div>
+          <div class="q-text">Solve simultaneously: 3x + 2y = 14 and x − y = 1</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">From 2nd: x = y+1. Substitute: 3(y+1)+2y=14 → 5y+3=14 → 5y=11 → y=11/5. Then x=11/5+1=16/5. Or: multiply x−y=1 by 2 → 2x−2y=2; add to 3x+2y=14 → 5x=16 → <strong>x = 16/5, y = 11/5</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════ GEOMETRY ═══════════════════════════ -->
+<div class="strand-panel" id="panel-geo">
+  <nav class="toc">
+    <a href="#geo-angles">Angles</a>
+    <a href="#geo-2d">2D Shapes</a>
+    <a href="#geo-3d">3D Shapes</a>
+    <a href="#geo-transforms">Transformations</a>
+    <a href="#geo-trig">Trigonometry</a>
+    <a href="#geo-pythagoras">Pythagoras</a>
+    <a href="#geo-constructions">Constructions</a>
+    <a href="#geo-technique">Exam Technique</a>
+    <a href="#geo-practice">Practice Qs</a>
+  </nav>
+  <div class="container">
+
+    <!-- ANGLES -->
+    <div class="section" id="geo-angles">
+      <div class="section-header">
+        <span class="section-num">G.01</span>
+        <h2>Angles &amp; Properties</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Angle rules — must know all</h3>
+        <table class="data-table">
+          <tr><th>Rule</th><th>What it says</th></tr>
+          <tr><td>Angles on a straight line</td><td>Sum = 180°</td></tr>
+          <tr><td>Angles around a point</td><td>Sum = 360°</td></tr>
+          <tr><td>Vertically opposite angles</td><td>Equal (formed where two lines cross)</td></tr>
+          <tr><td>Angles in a triangle</td><td>Sum = 180°</td></tr>
+          <tr><td>Angles in a quadrilateral</td><td>Sum = 360°</td></tr>
+          <tr><td>Corresponding angles (parallel lines)</td><td>Equal (F-angles)</td></tr>
+          <tr><td>Alternate angles (parallel lines)</td><td>Equal (Z-angles)</td></tr>
+          <tr><td>Co-interior / Allied angles (parallel lines)</td><td>Sum = 180° (C-angles)</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Polygons — interior and exterior angles</h3>
+        <div class="formula">Sum of interior angles of an n-sided polygon = (n − 2) × 180°</div>
+        <div class="formula">Each interior angle of a regular n-sided polygon = (n − 2) × 180° ÷ n</div>
+        <div class="formula">Each exterior angle of a regular n-sided polygon = 360° ÷ n</div>
+        <div class="key-fact">Interior angle + exterior angle = 180° (they are supplementary). The sum of all exterior angles of any polygon = 360°.</div>
+        <table class="data-table" style="margin-top:12px">
+          <tr><th>Polygon</th><th>n</th><th>Sum of interior angles</th><th>Each interior (regular)</th></tr>
+          <tr><td>Triangle</td><td>3</td><td>180°</td><td>60°</td></tr>
+          <tr><td>Quadrilateral</td><td>4</td><td>360°</td><td>90°</td></tr>
+          <tr><td>Pentagon</td><td>5</td><td>540°</td><td>108°</td></tr>
+          <tr><td>Hexagon</td><td>6</td><td>720°</td><td>120°</td></tr>
+          <tr><td>Octagon</td><td>8</td><td>1080°</td><td>135°</td></tr>
+          <tr><td>Decagon</td><td>10</td><td>1440°</td><td>144°</td></tr>
+        </table>
+      </div>
+      <div class="exam-tip">Always state the angle rule you're using by name (e.g. "alternate angles are equal because AB is parallel to CD"). You need the reason to earn full marks.</div>
+    </div>
+
+    <!-- 2D SHAPES -->
+    <div class="section" id="geo-2d">
+      <div class="section-header">
+        <span class="section-num">G.02</span>
+        <h2>Area &amp; Perimeter of 2D Shapes</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="formula-sheet">
+        <h4>2D Shape Formulas — the complete set</h4>
+        <div class="fs-grid">
+          <div class="fs-item"><div class="fs-name">Rectangle</div><div class="fs-formula">A = l × w</div></div>
+          <div class="fs-item"><div class="fs-name">Triangle</div><div class="fs-formula">A = ½ × b × h</div></div>
+          <div class="fs-item"><div class="fs-name">Parallelogram</div><div class="fs-formula">A = b × h</div></div>
+          <div class="fs-item"><div class="fs-name">Trapezium</div><div class="fs-formula">A = ½(a + b) × h</div></div>
+          <div class="fs-item"><div class="fs-name">Circle — Area</div><div class="fs-formula">A = π r²</div></div>
+          <div class="fs-item"><div class="fs-name">Circle — Circumference</div><div class="fs-formula">C = 2πr = πd</div></div>
+          <div class="fs-item"><div class="fs-name">Sector — Arc length</div><div class="fs-formula">L = (θ/360) × 2πr</div></div>
+          <div class="fs-item"><div class="fs-name">Sector — Area</div><div class="fs-formula">A = (θ/360) × πr²</div></div>
+        </div>
+      </div>
+      <div class="warn-box">The h in all area formulas is the PERPENDICULAR height — not a slant side. For a parallelogram, the base × the vertical height, not the slant side.</div>
+      <div class="worked">
+        <div class="q">Find the area of a trapezium with parallel sides 8 cm and 14 cm and perpendicular height 6 cm.</div>
+        <div class="steps">
+          <div class="step">Formula: A = ½(a + b) × h</div>
+          <div class="step">Substitute: A = ½(8 + 14) × 6 = ½ × 22 × 6 = 11 × 6</div>
+        </div>
+        <div class="ans">A = 66 cm²</div>
+      </div>
+      <div class="exam-tip">Leave answers in terms of π unless told to calculate numerically. e.g. "area = 25π cm²" is more precise than "78.5 cm²".</div>
+    </div>
+
+    <!-- 3D SHAPES -->
+    <div class="section" id="geo-3d">
+      <div class="section-header">
+        <span class="section-num">G.03</span>
+        <h2>Volume &amp; Surface Area of 3D Shapes</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="formula-sheet">
+        <h4>3D Shape Formulas — the complete set</h4>
+        <div class="fs-grid">
+          <div class="fs-item"><div class="fs-name">Cuboid — Volume</div><div class="fs-formula">V = l × w × h</div></div>
+          <div class="fs-item"><div class="fs-name">Cuboid — Surface Area</div><div class="fs-formula">SA = 2(lw + lh + wh)</div></div>
+          <div class="fs-item"><div class="fs-name">Prism — Volume</div><div class="fs-formula">V = Area of cross-section × length</div></div>
+          <div class="fs-item"><div class="fs-name">Cylinder — Volume</div><div class="fs-formula">V = πr²h</div></div>
+          <div class="fs-item"><div class="fs-name">Cylinder — Curved SA</div><div class="fs-formula">CSA = 2πrh</div></div>
+          <div class="fs-item"><div class="fs-name">Cylinder — Total SA</div><div class="fs-formula">TSA = 2πrh + 2πr²</div></div>
+          <div class="fs-item"><div class="fs-name">Cone — Volume</div><div class="fs-formula">V = ⅓πr²h</div></div>
+          <div class="fs-item"><div class="fs-name">Sphere — Volume</div><div class="fs-formula">V = (4/3)πr³</div></div>
+          <div class="fs-item"><div class="fs-name">Sphere — Surface Area</div><div class="fs-formula">SA = 4πr²</div></div>
+          <div class="fs-item"><div class="fs-name">Pyramid — Volume</div><div class="fs-formula">V = ⅓ × base area × h</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Units of area and volume</h3>
+        <table class="data-table">
+          <tr><th>Conversion</th><th>Area</th><th>Volume</th></tr>
+          <tr><td>cm ↔ mm</td><td>1 cm² = 100 mm²</td><td>1 cm³ = 1000 mm³</td></tr>
+          <tr><td>m ↔ cm</td><td>1 m² = 10,000 cm²</td><td>1 m³ = 1,000,000 cm³</td></tr>
+          <tr><td>Litres ↔ cm³</td><td>—</td><td>1 litre = 1000 cm³ = 1000 ml</td></tr>
+        </table>
+      </div>
+      <div class="exam-tip">Surface area = sum of ALL faces. Draw a net if you get confused about which faces to include. Count each face only once.</div>
+    </div>
+
+    <!-- TRANSFORMATIONS -->
+    <div class="section" id="geo-transforms">
+      <div class="section-header">
+        <span class="section-num">G.04</span>
+        <h2>Transformations</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>The four transformations</h3>
+        <table class="data-table">
+          <tr><th>Transformation</th><th>What changes</th><th>What stays the same</th><th>How to describe fully</th></tr>
+          <tr><td><strong>Translation</strong></td><td>Position</td><td>Shape, size, orientation</td><td>Vector (x, y) — top is horizontal, bottom is vertical</td></tr>
+          <tr><td><strong>Reflection</strong></td><td>Position, orientation</td><td>Shape, size</td><td>Equation of the mirror line</td></tr>
+          <tr><td><strong>Rotation</strong></td><td>Position, orientation</td><td>Shape, size</td><td>Centre of rotation, angle, direction (CW/CCW)</td></tr>
+          <tr><td><strong>Enlargement</strong></td><td>Size, position</td><td>Angles, shape (similar)</td><td>Centre of enlargement, scale factor</td></tr>
+        </table>
+        <div class="key-fact">An enlargement with scale factor less than 1 (e.g. 0.5) makes the shape smaller. Scale factor can also be negative — this places the image on the opposite side of the centre.</div>
+      </div>
+      <div class="card">
+        <h3>Enlargement and scale factor</h3>
+        <div class="formula">Scale factor = image length ÷ original length</div>
+        <div class="formula">Area of image = (scale factor)² × original area</div>
+        <div class="formula">Volume of image = (scale factor)³ × original volume</div>
+      </div>
+      <div class="warn-box">To fully describe a rotation, you MUST give all three: centre, angle AND direction. Missing any one part is an incomplete answer and loses marks.</div>
+    </div>
+
+    <!-- TRIGONOMETRY -->
+    <div class="section" id="geo-trig">
+      <div class="section-header">
+        <span class="section-num">G.05</span>
+        <h2>Trigonometry</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>SOH CAH TOA — right-angled triangles</h3>
+        <div class="formula-sheet" style="padding: 1.25rem 1.5rem">
+          <h4>The three trigonometric ratios</h4>
+          <div class="fs-grid">
+            <div class="fs-item"><div class="fs-name">Sine</div><div class="fs-formula">sin θ = Opp / Hyp</div></div>
+            <div class="fs-item"><div class="fs-name">Cosine</div><div class="fs-formula">cos θ = Adj / Hyp</div></div>
+            <div class="fs-item"><div class="fs-name">Tangent</div><div class="fs-formula">tan θ = Opp / Adj</div></div>
+          </div>
+        </div>
+        <div class="key-fact">Memory trick: <strong>SOH CAH TOA</strong> — "Some Old Hens Cackle And Hiss Throughout Our Area"</div>
+      </div>
+      <div class="card">
+        <h3>Finding a side vs finding an angle</h3>
+        <table class="data-table">
+          <tr><th>Task</th><th>Method</th><th>Example</th></tr>
+          <tr><td>Find a side</td><td>Choose ratio, rearrange formula, multiply/divide</td><td>x = 8 × sin(35°) = 4.59</td></tr>
+          <tr><td>Find an angle</td><td>Choose ratio, use inverse function (sin⁻¹, cos⁻¹, tan⁻¹)</td><td>θ = sin⁻¹(4/10) = 23.6°</td></tr>
+        </table>
+        <div class="worked">
+          <div class="q">In a right-angled triangle, the hypotenuse is 12 cm and the opposite side is 7 cm. Find the angle θ.</div>
+          <div class="steps">
+            <div class="step">We have Opp and Hyp → use sine</div>
+            <div class="step">sin θ = 7/12</div>
+            <div class="step">θ = sin⁻¹(7/12)</div>
+          </div>
+          <div class="ans">θ = 35.7°</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Exact values to know</h3>
+        <table class="data-table">
+          <tr><th>Angle</th><th>sin</th><th>cos</th><th>tan</th></tr>
+          <tr><td>0°</td><td>0</td><td>1</td><td>0</td></tr>
+          <tr><td>30°</td><td>1/2</td><td>√3/2</td><td>1/√3</td></tr>
+          <tr><td>45°</td><td>1/√2</td><td>1/√2</td><td>1</td></tr>
+          <tr><td>60°</td><td>√3/2</td><td>1/2</td><td>√3</td></tr>
+          <tr><td>90°</td><td>1</td><td>0</td><td>undefined</td></tr>
+        </table>
+      </div>
+      <div class="exam-tip">Always draw and label the triangle first: mark H (hypotenuse — opposite the right angle), O (opposite — across from the angle you're using), A (adjacent — next to the angle). Then pick the right ratio.</div>
+    </div>
+
+    <!-- PYTHAGORAS -->
+    <div class="section" id="geo-pythagoras">
+      <div class="section-header">
+        <span class="section-num">G.06</span>
+        <h2>Pythagoras' Theorem</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>The theorem</h3>
+        <div class="formula">a² + b² = c²  &nbsp;where c is the hypotenuse (longest side, opposite right angle)</div>
+        <div class="formula"><span class="label">Finding the hypotenuse</span>c = √(a² + b²)</div>
+        <div class="formula"><span class="label">Finding a shorter side</span>a = √(c² − b²)</div>
+        <div class="worked">
+          <div class="q">A ladder 5 m long leans against a wall. Its foot is 2 m from the wall. How high up the wall does it reach?</div>
+          <div class="steps">
+            <div class="step">The ladder is the hypotenuse (5 m); base = 2 m; height = unknown</div>
+            <div class="step">height² = 5² − 2² = 25 − 4 = 21</div>
+            <div class="step">height = √21</div>
+          </div>
+          <div class="ans">≈ 4.58 m</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Pythagorean triples to recognise</h3>
+        <p>These are right-angle triangles with whole-number sides:</p>
+        <p style="margin-top:8px; font-family: var(--mono); font-size: 13px; color: var(--accent-dark)">3, 4, 5 &nbsp;|&nbsp; 5, 12, 13 &nbsp;|&nbsp; 8, 15, 17 &nbsp;|&nbsp; 7, 24, 25</p>
+        <p style="margin-top:8px; font-size:13px">And their multiples: 6, 8, 10 (double of 3,4,5) etc.</p>
+      </div>
+      <div class="exam-tip">Pythagoras vs Trig: if you have an angle (other than 90°), use trig. If you just need a missing side in a right-angled triangle with two sides known, use Pythagoras.</div>
+    </div>
+
+    <!-- CONSTRUCTIONS -->
+    <div class="section" id="geo-constructions">
+      <div class="section-header">
+        <span class="section-num">G.07</span>
+        <h2>Constructions, Loci &amp; Bearings</h2>
+        <span class="freq-tag freq-med">Medium frequency</span>
+      </div>
+      <div class="card">
+        <h3>Key constructions (with compasses)</h3>
+        <ul>
+          <li><strong>Perpendicular bisector</strong> of a line segment: open compasses &gt;½ length; draw arcs above and below from each end; join intersections</li>
+          <li><strong>Angle bisector</strong>: draw arc from vertex crossing both arms; draw arcs from those points; join intersection to vertex</li>
+          <li><strong>Perpendicular from a point to a line</strong>: draw arc crossing line at two points; then perpendicular bisector method on those two points</li>
+        </ul>
+        <div class="warn-box">Keep construction arcs visible! Erasing them loses marks, as the examiner needs to see your method.</div>
+      </div>
+      <div class="card">
+        <h3>Bearings</h3>
+        <ul>
+          <li>Always measured clockwise from North</li>
+          <li>Always written as 3 digits: 005°, 090°, 270°</li>
+          <li>North = 000°, East = 090°, South = 180°, West = 270°</li>
+          <li>Back bearing (reverse): add 180° if bearing &lt; 180°; subtract 180° if bearing &gt; 180°</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- GEO TECHNIQUE -->
+    <div class="section" id="geo-technique">
+      <div class="section-header">
+        <span class="section-num">G.08</span>
+        <h2>Exam Technique — Geometry &amp; Measure</h2>
+      </div>
+      <div class="summary-band">
+        <h4>Geometry — key formulas to memorise</h4>
+        <ul>
+          <li><strong>Sum interior angles:</strong> (n−2) × 180°; exterior angles sum to 360°</li>
+          <li><strong>Circle:</strong> A = πr², C = 2πr</li>
+          <li><strong>Trapezium:</strong> A = ½(a+b)h</li>
+          <li><strong>Cylinder:</strong> V = πr²h; SA = 2πrh + 2πr²</li>
+          <li><strong>SOH CAH TOA:</strong> sin=O/H, cos=A/H, tan=O/A</li>
+          <li><strong>Pythagoras:</strong> a² + b² = c²</li>
+          <li><strong>Scale factor:</strong> area × k², volume × k³</li>
+          <li><strong>Bearings:</strong> 3 digits, measured clockwise from North</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- GEO PRACTICE -->
+    <div class="section" id="geo-practice">
+      <div class="section-header">
+        <span class="section-num">G.09</span>
+        <h2>Practice Questions — Geometry &amp; Measure</h2>
+      </div>
+      <div class="practice-section">
+        <h3>Try these exam-style questions</h3>
+        <div class="subtitle">Attempt each question before revealing the answer. Show all working.</div>
+
+        <div class="q-block">
+          <div class="q-num">Question 1</div>
+          <div class="q-text">A regular hexagon has a perimeter of 42 cm. Find the sum of its interior angles and the size of each interior angle.</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Sum = (6−2)×180° = <strong>720°</strong>. Each angle = 720°÷6 = <strong>120°</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 2</div>
+          <div class="q-text">Find the area of a circle with diameter 14 cm. Give your answer in terms of π.</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">r = 14÷2 = 7 cm → A = π × 7² = <strong>49π cm²</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 3</div>
+          <div class="q-text">A right-angled triangle has legs of 9 cm and 12 cm. Find the length of the hypotenuse.</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">c² = 9² + 12² = 81 + 144 = 225 → c = √225 = <strong>15 cm</strong> (this is a 3-4-5 triple scaled by 3)</div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 4</div>
+          <div class="q-text">In a right-angled triangle, the adjacent side is 10 cm and the hypotenuse is 13 cm. Find the angle between them.</div>
+          <span class="marks">[2 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">cos θ = Adj/Hyp = 10/13 → θ = cos⁻¹(10/13) = <strong>39.7°</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 5</div>
+          <div class="q-text">A cylinder has radius 4 cm and height 10 cm. Find its volume and total surface area. Give answers to 3 significant figures.</div>
+          <span class="marks">[4 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">V = π(4²)(10) = 160π ≈ <strong>503 cm³</strong>. TSA = 2π(4)(10) + 2π(4²) = 80π + 32π = 112π ≈ <strong>352 cm²</strong></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════ STATISTICS ═══════════════════════════ -->
+<div class="strand-panel" id="panel-stat">
+  <nav class="toc">
+    <a href="#stat-averages">Averages</a>
+    <a href="#stat-charts">Charts &amp; Graphs</a>
+    <a href="#stat-probability">Probability</a>
+    <a href="#stat-combined">Combined Events</a>
+    <a href="#stat-scatter">Scatter Graphs</a>
+    <a href="#stat-technique">Exam Technique</a>
+    <a href="#stat-practice">Practice Qs</a>
+  </nav>
+  <div class="container">
+
+    <!-- AVERAGES -->
+    <div class="section" id="stat-averages">
+      <div class="section-header">
+        <span class="section-num">S.01</span>
+        <h2>Averages &amp; Spread</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Mean, median, mode and range</h3>
+        <table class="data-table">
+          <tr><th>Measure</th><th>How to calculate</th><th>Use when…</th></tr>
+          <tr><td><strong>Mean</strong></td><td>Sum of all values ÷ number of values</td><td>Data is numerical without extreme outliers</td></tr>
+          <tr><td><strong>Median</strong></td><td>Middle value when data ordered from smallest to largest</td><td>Data has outliers (the median is more representative)</td></tr>
+          <tr><td><strong>Mode</strong></td><td>Most frequently occurring value (can have 0, 1, or more modes)</td><td>Non-numerical data; or most typical value needed</td></tr>
+          <tr><td><strong>Range</strong></td><td>Largest value − smallest value</td><td>Measuring spread/consistency</td></tr>
+        </table>
+        <div class="key-fact">Even number of values? Median = mean of the two middle values. e.g. for 6 values, median = average of 3rd and 4th.</div>
+      </div>
+      <div class="card">
+        <h3>Estimated mean from a frequency table</h3>
+        <div class="formula">Estimated mean = Σ(midpoint × frequency) ÷ Σfrequency</div>
+        <div class="worked">
+          <div class="q">Heights (cm): 140–150 (f=5), 150–160 (f=8), 160–170 (f=7). Find the estimated mean.</div>
+          <div class="steps">
+            <div class="step">Midpoints: 145, 155, 165</div>
+            <div class="step">Σ(fx): 145×5 + 155×8 + 165×7 = 725 + 1240 + 1155 = 3120</div>
+            <div class="step">Σf: 5 + 8 + 7 = 20</div>
+            <div class="step">Estimated mean = 3120 ÷ 20 = 156</div>
+          </div>
+          <div class="ans">156 cm</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Interquartile range (IQR)</h3>
+        <div class="formula">IQR = Upper quartile (Q3) − Lower quartile (Q1)</div>
+        <p>IQR measures the spread of the middle 50% of data. It is more reliable than range because it is not affected by outliers.</p>
+        <p style="margin-top:8px"><strong>Q2</strong> = median (50th percentile); <strong>Q1</strong> = median of lower half; <strong>Q3</strong> = median of upper half</p>
+      </div>
+      <div class="exam-tip">When comparing two data sets, always comment on BOTH the average (mean or median) AND the spread (range or IQR). Single-measure comparisons earn only half the marks available.</div>
+    </div>
+
+    <!-- CHARTS & GRAPHS -->
+    <div class="section" id="stat-charts">
+      <div class="section-header">
+        <span class="section-num">S.02</span>
+        <h2>Statistical Diagrams</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Choosing the right diagram</h3>
+        <table class="data-table">
+          <tr><th>Diagram</th><th>Best used for</th><th>Key features</th></tr>
+          <tr><td><strong>Bar chart</strong></td><td>Comparing categories (discrete data)</td><td>Equal-width bars; gaps between bars; frequency on y-axis</td></tr>
+          <tr><td><strong>Pie chart</strong></td><td>Showing proportion of a whole</td><td>Angles: (frequency ÷ total) × 360°</td></tr>
+          <tr><td><strong>Frequency diagram / histogram</strong></td><td>Continuous data grouped into classes</td><td>No gaps between bars; y-axis is frequency density for unequal widths</td></tr>
+          <tr><td><strong>Line graph</strong></td><td>Change over time (continuous data)</td><td>Points connected; time on x-axis</td></tr>
+          <tr><td><strong>Stem-and-leaf diagram</strong></td><td>Showing individual values and distribution</td><td>Leaves in order; back-to-back for comparison</td></tr>
+          <tr><td><strong>Box-and-whisker plot</strong></td><td>Showing spread using 5-number summary</td><td>Min, Q1, median, Q3, Max</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Pie chart angle formula</h3>
+        <div class="formula">Angle for a category = (frequency of category ÷ total frequency) × 360°</div>
+        <p>Check: all angles should sum to 360°.</p>
+      </div>
+      <div class="card">
+        <h3>Reading data from diagrams</h3>
+        <ul>
+          <li>Frequency density (histograms): Frequency = frequency density × class width</li>
+          <li>Always read the scale carefully — check what each small division represents</li>
+          <li>For back-to-back stem-and-leaf: the stems are shared in the middle; leaves read outward</li>
+        </ul>
+      </div>
+      <div class="exam-tip">When drawing a pie chart, always use a protractor and start from 12 o'clock. Label each sector with its category name AND the angle (or percentage).</div>
+    </div>
+
+    <!-- PROBABILITY -->
+    <div class="section" id="stat-probability">
+      <div class="section-header">
+        <span class="section-num">S.03</span>
+        <h2>Probability</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Basic probability</h3>
+        <div class="formula">P(event) = number of favourable outcomes ÷ total number of equally likely outcomes</div>
+        <ul style="margin-top:10px">
+          <li>Probability is always between 0 (impossible) and 1 (certain)</li>
+          <li>P(event NOT happening) = 1 − P(event)</li>
+          <li>P(A) + P(not A) = 1 &nbsp;&nbsp;(complementary events)</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h3>Mutually exclusive events</h3>
+        <p>Mutually exclusive = cannot happen at the same time.</p>
+        <div class="formula">P(A or B) = P(A) + P(B)  [for mutually exclusive events]</div>
+        <p style="margin-top:8px">e.g. Rolling a 2 or a 5 on a die: P(2 or 5) = 1/6 + 1/6 = 2/6 = 1/3</p>
+      </div>
+      <div class="card">
+        <h3>Independent events (AND rule)</h3>
+        <p>Independent = outcome of one does not affect the other.</p>
+        <div class="formula">P(A and B) = P(A) × P(B)  [for independent events]</div>
+        <p style="margin-top:8px">e.g. Flipping heads AND rolling a 6: ½ × 1/6 = 1/12</p>
+      </div>
+      <div class="card">
+        <h3>Relative frequency (experimental probability)</h3>
+        <div class="formula">Relative frequency = number of times event occurred ÷ total trials</div>
+        <div class="key-fact">The more trials you carry out, the closer the relative frequency gets to the true theoretical probability. A large number of trials = more reliable estimate.</div>
+      </div>
+      <div class="warn-box">Probability words to avoid in answers: "likely", "rare", "often". Always use numerical probability (a fraction, decimal, or percentage) in probability questions.</div>
+    </div>
+
+    <!-- COMBINED EVENTS -->
+    <div class="section" id="stat-combined">
+      <div class="section-header">
+        <span class="section-num">S.04</span>
+        <h2>Combined Events &amp; Tree Diagrams</h2>
+        <span class="freq-tag freq-high">Very high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Sample space diagrams</h3>
+        <p>List all possible outcomes in a table. Count favourable outcomes from the table.</p>
+        <p style="margin-top:8px">e.g. Rolling two dice: 6 × 6 = 36 possible outcomes. P(sum = 7) = 6/36 = 1/6</p>
+      </div>
+      <div class="card">
+        <h3>Tree diagrams</h3>
+        <ul>
+          <li>List probabilities on the branches</li>
+          <li>Probabilities on branches from the same point must sum to 1</li>
+          <li>Multiply along branches to find probability of a path</li>
+          <li>Add the results for paths that satisfy the condition (OR between paths)</li>
+        </ul>
+        <div class="worked">
+          <div class="q">A bag has 3 red and 5 blue balls. Two balls are drawn with replacement. Find P(one of each colour).</div>
+          <div class="steps">
+            <div class="step">P(RB) = 3/8 × 5/8 = 15/64</div>
+            <div class="step">P(BR) = 5/8 × 3/8 = 15/64</div>
+            <div class="step">P(one of each) = 15/64 + 15/64 = 30/64 = 15/32</div>
+          </div>
+          <div class="ans">15/32</div>
+        </div>
+      </div>
+      <div class="card">
+        <h3>Without replacement</h3>
+        <p>When items are not replaced, the probabilities change for the second event.</p>
+        <div class="formula">e.g. 3 red, 5 blue (8 total). P(red then red) = 3/8 × 2/7 = 6/56 = 3/28</div>
+        <div class="warn-box">For "without replacement" problems, reduce the denominator by 1 for the second pick. Also reduce the numerator by 1 only if the same colour is picked again.</div>
+      </div>
+      <div class="exam-tip">Draw the tree diagram even if the question doesn't ask for it. It organises the problem visually and helps you avoid missing combinations. The marks for the method are often as important as the final answer.</div>
+    </div>
+
+    <!-- SCATTER GRAPHS -->
+    <div class="section" id="stat-scatter">
+      <div class="section-header">
+        <span class="section-num">S.05</span>
+        <h2>Scatter Graphs &amp; Correlation</h2>
+        <span class="freq-tag freq-med">Medium-high frequency</span>
+      </div>
+      <div class="card">
+        <h3>Types of correlation</h3>
+        <table class="data-table">
+          <tr><th>Type</th><th>Appearance</th><th>Meaning</th></tr>
+          <tr><td><strong>Positive correlation</strong></td><td>Points trend upward left to right</td><td>As x increases, y increases</td></tr>
+          <tr><td><strong>Negative correlation</strong></td><td>Points trend downward left to right</td><td>As x increases, y decreases</td></tr>
+          <tr><td><strong>No correlation</strong></td><td>Points scattered randomly</td><td>No relationship between x and y</td></tr>
+          <tr><td><strong>Strong correlation</strong></td><td>Points close to a straight line</td><td>Relationship is consistent</td></tr>
+          <tr><td><strong>Weak correlation</strong></td><td>Points loosely follow a trend</td><td>Relationship exists but with variation</td></tr>
+        </table>
+      </div>
+      <div class="card">
+        <h3>Line of best fit</h3>
+        <ul>
+          <li>Draw a straight line through the middle of the data (roughly equal points above and below)</li>
+          <li>Must pass through or near the mean point (x̄, ȳ)</li>
+          <li>Use it to make predictions (interpolation = within range; extrapolation = outside range)</li>
+          <li>Extrapolation is unreliable — the trend may not continue</li>
+        </ul>
+        <div class="warn-box">Correlation does NOT mean causation. Just because two variables are correlated does not mean one causes the other.</div>
+      </div>
+      <div class="exam-tip">When describing correlation, always state: (1) the type (positive/negative/none), (2) the strength (strong/weak), and (3) what it means in context. e.g. "strong positive correlation — taller students tend to have longer arm spans".</div>
+    </div>
+
+    <!-- STAT TECHNIQUE -->
+    <div class="section" id="stat-technique">
+      <div class="section-header">
+        <span class="section-num">S.06</span>
+        <h2>Exam Technique — Statistics &amp; Probability</h2>
+      </div>
+      <div class="summary-band">
+        <h4>Statistics &amp; Probability — key formulas to memorise</h4>
+        <ul>
+          <li><strong>Mean:</strong> Σx ÷ n; <strong>Estimated mean:</strong> Σ(fx) ÷ Σf</li>
+          <li><strong>IQR:</strong> Q3 − Q1 (spread of middle 50%)</li>
+          <li><strong>Probability:</strong> P(E) = favourable ÷ total; always between 0 and 1</li>
+          <li><strong>P(not A):</strong> 1 − P(A)</li>
+          <li><strong>AND rule:</strong> P(A and B) = P(A) × P(B) [independent]</li>
+          <li><strong>OR rule:</strong> P(A or B) = P(A) + P(B) [mutually exclusive]</li>
+          <li><strong>Pie chart angle:</strong> (f ÷ total) × 360°</li>
+          <li><strong>Tree diagrams:</strong> multiply along branches; add between branches</li>
+          <li><strong>Comparison:</strong> always comment on average AND spread</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- STAT PRACTICE -->
+    <div class="section" id="stat-practice">
+      <div class="section-header">
+        <span class="section-num">S.07</span>
+        <h2>Practice Questions — Statistics &amp; Probability</h2>
+      </div>
+      <div class="practice-section">
+        <h3>Try these exam-style questions</h3>
+        <div class="subtitle">Attempt each question before revealing the answer. Show all working.</div>
+
+        <div class="q-block">
+          <div class="q-num">Question 1</div>
+          <div class="q-text">The scores of 7 students are: 14, 9, 18, 11, 14, 20, 7. Find the mean, median, mode, and range.</div>
+          <span class="marks">[4 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Ordered: 7, 9, 11, 14, 14, 18, 20 → Mean = (7+9+11+14+14+18+20)/7 = 93/7 ≈ <strong>13.3</strong> → Median = <strong>14</strong> (4th value) → Mode = <strong>14</strong> → Range = 20−7 = <strong>13</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 2</div>
+          <div class="q-text">A bag contains 4 green, 3 yellow, and 5 red counters. One counter is picked at random. Find P(green), P(not red), and P(blue).</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Total = 12 → P(green) = <strong>4/12 = 1/3</strong> → P(not red) = 7/12 → <strong>7/12</strong> → P(blue) = <strong>0</strong> (no blue counters)</div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 3</div>
+          <div class="q-text">Two fair coins are flipped. Draw a sample space diagram and find P(exactly one head).</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Sample space: HH, HT, TH, TT (4 outcomes) → Exactly one head: HT, TH → P(exactly one head) = <strong>2/4 = 1/2</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 4</div>
+          <div class="q-text">A box has 4 black and 6 white socks. Two socks are taken without replacement. Find the probability that both socks are the same colour.</div>
+          <span class="marks">[4 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">P(BB) = 4/10 × 3/9 = 12/90. P(WW) = 6/10 × 5/9 = 30/90. P(same colour) = 12/90 + 30/90 = 42/90 = <strong>7/15</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 5</div>
+          <div class="q-text">A grouped frequency table shows test scores: 0–20 (f=4), 20–40 (f=11), 40–60 (f=9), 60–80 (f=6). Find the estimated mean.</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Midpoints: 10, 30, 50, 70 → Σ(fx) = 10×4 + 30×11 + 50×9 + 70×6 = 40+330+450+420 = 1240 → Σf = 30 → Mean = 1240÷30 = <strong>41.3</strong></div>
+        </div>
+
+        <div class="q-block">
+          <div class="q-num">Question 6</div>
+          <div class="q-text">In 80 spins of a biased spinner, the number 3 came up 24 times. Estimate the probability of getting a 3 on the next spin. Is this a theoretical or experimental probability? How could the estimate be made more reliable?</div>
+          <span class="marks">[3 marks]</span><br>
+          <button class="answer-toggle" onclick="toggleAnswer(this)">Show Answer</button>
+          <div class="answer-box">Relative frequency = 24/80 = <strong>0.3 (or 3/10)</strong>. This is <strong>experimental (relative frequency)</strong> probability, not theoretical. The estimate would be more reliable by <strong>increasing the number of trials</strong>.</div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- FOOTER -->
+<div class="footer">
+  <strong>Cambridge Lower Secondary Checkpoint · Mathematics 0862 · Complete Revision Guide</strong><br>
+  Number · Algebra · Geometry &amp; Measure · Statistics &amp; Probability<br>
+  For personal and educational use only · Good luck on your examination!
+</div>
+
+<script>
+  const strands = {
+    num: {
+      accent: '#92400e', light: '#fef3c7', mid: '#d97706', dark: '#92400e',
+      symbol: '∑', title: 'Number<br><em>Study Guide</em>',
+      desc: 'Complete revision notes for all Number topics — integers, fractions, percentages, powers, ratio, primes, and standard form — with worked examples and exam tips.'
+    },
+    alg: {
+      accent: '#881337', light: '#ffe4e6', mid: '#f43f5e', dark: '#881337',
+      symbol: 'ƒ', title: 'Algebra<br><em>Study Guide</em>',
+      desc: 'Full Algebra revision: expressions, equations, inequalities, sequences, straight-line and quadratic graphs, and simultaneous equations.'
+    },
+    geo: {
+      accent: '#134e4a', light: '#ccfbf1', mid: '#14b8a6', dark: '#134e4a',
+      symbol: 'π', title: 'Geometry &amp;<br><em>Measure Guide</em>',
+      desc: 'Complete Geometry and Measure notes: angles, 2D and 3D shapes, transformations, trigonometry, Pythagoras, constructions, and bearings.'
+    },
+    stat: {
+      accent: '#4c1d95', light: '#ede9fe', mid: '#8b5cf6', dark: '#4c1d95',
+      symbol: 'P', title: 'Statistics &amp;<br><em>Probability Guide</em>',
+      desc: 'Statistics and Probability revision: averages, spread, diagrams, probability rules, tree diagrams, combined events, and scatter graphs.'
+    }
+  };
+
+  function switchStrand(strand) {
+    const s = strands[strand];
+
+    document.documentElement.style.setProperty('--accent', s.accent);
+    document.documentElement.style.setProperty('--accent-light', s.light);
+    document.documentElement.style.setProperty('--accent-mid', s.mid);
+    document.documentElement.style.setProperty('--accent-dark', s.dark);
+
+    const hero = document.getElementById('hero');
+    hero.style.background = s.dark;
+    hero.setAttribute('data-symbol', s.symbol);
+    document.getElementById('hero-title').innerHTML = s.title;
+    document.getElementById('hero-desc').textContent = s.desc.replace(/&amp;/g, '&').replace(/<em>/g,'').replace(/<\/em>/g,'');
+
+    document.querySelectorAll('.strand-panel').forEach(p => p.classList.remove('active'));
+    document.getElementById('panel-' + strand).classList.add('active');
+
+    document.querySelectorAll('.strand-btn').forEach(b => b.classList.remove('active'));
+    document.querySelector('[data-strand="' + strand + '"]').classList.add('active');
+
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function toggleAnswer(btn) {
+    const box = btn.nextElementSibling;
+    const isVisible = box.classList.contains('visible');
+    box.classList.toggle('visible', !isVisible);
+    btn.textContent = isVisible ? 'Show Answer' : 'Hide Answer';
+  }
+</script>
+</body>
+</html>
